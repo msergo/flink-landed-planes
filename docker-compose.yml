@@ -1,3 +1,4 @@
+# RabbitMQ and DB for local development
 services:
   rabbitmq:
     image: bitnami/rabbitmq
@@ -6,3 +7,10 @@ services:
       - "15672:15672"
     environment:
       RABBITMQ_MANAGEMENT_ALLOW_WEB_ACCESS: true
+
+  flyway:
+    image: flyway/flyway:10-alpine
+    command: -url=jdbc:sqlite:project/dev-db.sqlite migrate
+    volumes:
+      - ./migrations:/flyway/sql
+      - ./dev-db:/flyway/project

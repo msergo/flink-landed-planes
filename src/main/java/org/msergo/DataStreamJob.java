@@ -46,11 +46,13 @@ public class DataStreamJob {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().setGlobalJobParameters(config);
 
-        Configuration jobConfig = new Configuration();
-        jobConfig.set(StateBackendOptions.STATE_BACKEND, "rocksdb");
-        jobConfig.set(CheckpointingOptions.CHECKPOINT_STORAGE, "filesystem");
-        jobConfig.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, "file:///flink-data");
-        env.configure(jobConfig);
+        if (config.get("IGNORE_ROCKSDB") == null) {
+            Configuration jobConfig = new Configuration();
+            jobConfig.set(StateBackendOptions.STATE_BACKEND, "rocksdb");
+            jobConfig.set(CheckpointingOptions.CHECKPOINT_STORAGE, "filesystem");
+            jobConfig.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, "file:///flink-data");
+            env.configure(jobConfig);
+        }
 
         final DataStream<StateVector> stream = env
                 .addSource(new RabbitMQCustomSource(connectionConfig, "core-api", "flink.open-sky-vectors"))

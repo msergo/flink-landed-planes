@@ -25,3 +25,14 @@ All the params are submitted as arguments
 
 I used a Flink cluster running on Kubernetes, but it can run locally as well, including writes to a SQLIte database.
 
+1. Prepare the db and rabbitmq
+
+```shell
+docker-compose up
+```
+
+2. Run from IDE with args
+
+```shell
+--RABBITMQ_HOST 0.0.0.0 --RABBITMQ_USER user --RABBITMQ_PASSWORD bitnami --DB_URL jdbc:sqlite:dev-db/dev-db.sqlite --DB_DRIVER org.sqlite.JDBC --IGNORE_ROCKSDB true
+```
